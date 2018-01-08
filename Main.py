@@ -52,9 +52,9 @@ def setup_database():
     on server startup
     """
     with sqlite3.connect(DB_STRING) as con:
-        con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY, vorname VARCHAR, nachname VARCHAR)")
-        con.execute("INSERT INTO benutzer VALUES(0, 'Marvin', 'Ertl')")
-        con.execute("CREATE TABLE user_string (session_id, value)")
+        con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY, vorname VARCHAR, nachname VARCHAR, "
+                    "username VARCHAR, password VARCHAR)")
+        con.execute("INSERT INTO benutzer VALUES(0, 'Marvin', 'Ertl', 'mertl', 'password')")
 
 
 def cleanup_database():
@@ -63,8 +63,7 @@ def cleanup_database():
     on server shutdown.
     """
     with sqlite3.connect(DB_STRING) as con:
-        con.execute("DROP TABLE user_string")
-        con.execute("DROP TABLE benutzer")
+        con.execute("DROP TABLE IF EXISTS benutzer")
 
 
 if __name__ == '__main__':
@@ -86,7 +85,7 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 8089})
+    cherrypy.config.update({'server.socket_port': 8090})
 
     webapp = CRUD()
     webapp.generator = CRUDWebService()

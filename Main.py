@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 8083})
+    cherrypy.config.update({'server.socket_port': 8087})
 
     webapp = CRUD()
     webapp.generator = CRUDWebService()

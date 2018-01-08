@@ -2,14 +2,15 @@
 <html>
     <head>
         <meta charset="ISO-8859-1">
-        <link href="/static/css/style.css" rel="stylesheet">
-        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <script type="text/javascript">
             $(document).ready(function() {
-                $("#create-string").hide();
-                $("#read-string").hide();
-                $("#update-string").hide();
-                $("#delete-string").hide();
+                closeTabs();
 
                 $("#generate-string").click(function(e) {
                     $.post("/generator", {"length": $("input[name='length']").val()})
@@ -102,36 +103,85 @@
         </script>
     </head>
     <body>
+        <div class="container-fluid">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="text-align: center">
+                    <h1>CRUD</h1>
+                </div>
 
-    <h1>CRUD</h1><br>
+                <div class="panel-body">
+                    <button type="button" style="width: 100%" class="btn btn-default btn-md" id="showCreate">Create</button><br>
+                    <button type="button" style="width: 100%" class="btn btn-default btn-md" id="showRead">Read</button><br>
+                    <button type="button" style="width: 100%" class="btn btn-default btn-md" id="showUpdate">Update</button><br>
+                    <button type="button" style="width: 100%" class="btn btn-default btn-md" id="showDelete">Delete</button><br>
+                    <br>
 
-    <button id="showCreate">Create</button><br>
-    <div id="create-string">
-        Benutzer erstellen:<br>
-        <input id="vorname" /><br>
-        <input id="nachname" /><br>
-        <input id="username" /><br>
-        <input id="password" type="password" /><br>
-        <button id="createBenutzer">Erstellen</button>
-    </div>
+                    <div id="create-string">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3>Benutzer erstellen:</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table style="width:30%">
+                                    <tr>
+                                        <td>Vorname:</td>
+                                        <td><input id="vorname" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nachname:</td>
+                                        <td><input id="nachname" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Username:</td>
+                                        <td><input id="username" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Passwort:</td>
+                                        <td><input id="password" type="password" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><button id="createBenutzer">Erstellen</button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-    <button id="showRead">Read</button><br>
-    <div id="read-string">
-        Benutzer auslesen<br>
-        <input type="text"/>
-    </div>
+                    <div id="read-string">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3>Benutzer auslesen:</h3>
+                            </div>
+                            <div class="panel-body">
+                                <input type="text"/>
+                            </div>
+                        </div>
+                    </div>
 
-    <button id="showUpdate">Update</button><br>
-    <div id="update-string">
-        Benutzer updaten<br>
-        <input type="text"/>
-    </div>
+                    <div id="update-string">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3>Benutzer updaten:</h3>
+                            </div>
+                            <div class="panel-body">
+                                <input type="text"/>
+                            </div>
+                        </div>
+                    </div>
 
-    <button id="showDelete">Delete</button><br>
-    <div id="delete-string">
-        Benutzer löschen<br>
-        <input type="text"/>
-    </div>
-
+                    <div id="delete-string">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3>Benutzer löschen:</h3>
+                            </div>
+                            <div class="panel-body">
+                                <input type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

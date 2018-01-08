@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="ISO-8859-1">
+        <link href="/static/css/style.css" rel="stylesheet">
+        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#create-string").hide();
+                $("#read-string").hide();
+                $("#update-string").hide();
+                $("#delete-string").hide();
+
+                $("#generate-string").click(function(e) {
+                    $.post("/generator", {"length": $("input[name='length']").val()})
+                     .done(function(string) {
+                        $("#the-string").show();
+                        $("#the-string input").val(string);
+                    });
+                    e.preventDefault();
+                });
+
+                $("#replace-string").click(function(e) {
+                    $.ajax({
+                        type: "PUT",
+                        url: "/generator",
+                        data: {"another_string": $("#the-string input").val()}
+                    })
+                    .done(function() {
+                        alert("Replaced!");
+                    });
+                    e.preventDefault();
+                });
+
+                $("#delete-string").click(function(e) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/generator"
+                    })
+                    .done(function() {
+                        $("#the-string").hide();
+                    });
+                    e.preventDefault();
+                });
+
+
+                $("#createBenutzer").click(function(e) {
+                    $("#read-string").hide();
+                    $("#update-string").hide();
+                    $("#delete-string").hide();
+                    $.get()
+                        .done(function (string) {
+
+                            $("#create-string").show();
+                            $("#create-string input").val(string);
+                        })
+                    e.preventDefault();
+                });
+
+                $("#readBenutzer").click(function(e) {
+                    $("#create-string").hide();
+                    $("#update-string").hide();
+                    $("#delete-string").hide();
+                    $.get()
+                        .done(function (string) {
+                            $("#read-string").show();
+                            $("#read-string input").val(string);
+                        })
+                    e.preventDefault();
+                });
+
+                $("#updateBenutzer").click(function(e) {
+                    $("#create-string").hide();
+                    $("#read-string").hide();
+                    $("#delete-string").hide();
+                    $.get()
+                        .done(function (string) {
+                            $("#update-string").show();
+                            $("#update-string input").val(string);
+                        })
+                    e.preventDefault();
+                });
+
+                $("#deleteBenutzer").click(function(e) {
+                    $("#create-string").hide();
+                    $("#read-string").hide();
+                    $("#update-string").hide();
+                    $.get()
+                        .done(function (string) {
+                            $("#delete-string").show();
+                            $("#delete-string input").val(string);
+                        })
+                    e.preventDefault();
+                });
+
+            });
+        </script>
+    </head>
+    <body>
+
+    <h1>CRUD</h1><br>
+    <button id="createBenutzer">Create</button><br>
+    <div id="create-string">
+        Benutzer erstellen<br>
+        <input type="text"/>
+    </div>
+    <button id="readBenutzer">Read</button><br>
+    <div id="read-string">
+        Benutzer auslesen<br>
+        <input type="text"/>
+    </div>
+    <button id="updateBenutzer">Update</button><br>
+    <div id="update-string">
+        Benutzer updaten<br>
+        <input type="text"/>
+    </div>
+    <button id="deleteBenutzer">Delete</button><br>
+    <div id="delete-string">
+        Benutzer löschen<br>
+        <input type="text"/>
+    </div>
+
+    </body>
+</html>

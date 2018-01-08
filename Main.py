@@ -9,21 +9,20 @@ import cherrypy
 DB_STRING = "datenbank.db"
 
 
-class StringGenerator(object):
+class CRUD(object):
     @cherrypy.expose
     def index(self):
         return open('index.html')
 
 
 @cherrypy.expose
-class StringGeneratorWebService(object):
+class CRUDWebService(object):
 
     @cherrypy.tools.accept(media='text/plain')
     def GET(self):
         with sqlite3.connect(DB_STRING) as c:
             cherrypy.session['ts'] = time.time()
-            r = c.execute("SELECT value FROM user_string WHERE session_id=?",
-                          [cherrypy.session.id])
+            r = c.execute("SELECT vorname FROM benutzer WHERE nr = 0", [cherrypy.session.id])
             return r.fetchone()
 
     def POST(self, length=8):
@@ -54,6 +53,7 @@ def setup_database():
     """
     with sqlite3.connect(DB_STRING) as con:
         con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY, vorname VARCHAR, nachname VARCHAR)")
+        con.execute("INSERT INTO benutzer VALUES(0, 'Marvin', 'Ertl')")
         con.execute("CREATE TABLE user_string (session_id, value)")
 
 
@@ -86,7 +86,8 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
+    cherrypy.config.update({'server.socket_port': 8083})
 
-    webapp = StringGenerator()
-    webapp.generator = StringGeneratorWebService()
+    webapp = CRUD()
+    webapp.generator = CRUDWebService()
     cherrypy.quickstart(webapp, '/', conf)

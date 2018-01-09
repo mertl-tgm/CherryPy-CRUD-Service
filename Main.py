@@ -51,23 +51,16 @@ class CRUDWebService(object):
 
 
 def setup_database():
-    """
-    Create the `user_string` table in the database
-    on server startup
-    """
     with sqlite3.connect(DB_STRING) as con:
+        con.execute("DROP TABLE IF EXISTS benutzer")
         con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY, vorname VARCHAR, nachname VARCHAR, "
                     "username VARCHAR, password VARCHAR)")
         con.execute("INSERT INTO benutzer VALUES(0, 'Marvin', 'Ertl', 'mertl', 'password')")
 
 
 def cleanup_database():
-    """
-    Destroy the `user_string` table from the database
-    on server shutdown.
-    """
     with sqlite3.connect(DB_STRING) as con:
-        con.execute("DROP TABLE benutzer")
+        con.execute("DROP TABLE IF EXISTS benutzer")
 
 
 if __name__ == '__main__':
@@ -89,7 +82,7 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 8117})
+    cherrypy.config.update({'server.socket_port': 8121})
 
     webapp = CRUD()
     webapp.generator = CRUDWebService()

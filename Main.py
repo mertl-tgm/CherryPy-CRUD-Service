@@ -25,7 +25,7 @@ class CRUDWebService(object):
             r = c.execute("SELECT vorname FROM benutzer WHERE nr = 0", [cherrypy.session.id])
             return r.fetchone()
 
-    def POST(self, param):
+    def POST(self, param, input):
         print("TEST submit button :" + param)
         if param == "read":
             with sqlite3.connect(DB_STRING) as c:
@@ -38,7 +38,6 @@ class CRUDWebService(object):
                     row = r.fetchone()
                     if row == None:
                         break
-                    print(str(row[0]))
                     response += "<tr><td>" + str(row[0]) + "</td><td>" + row[1] + "</td><td>" + row[2] + "</td><td>" \
                                 + row[3] + "</td></tr>"
                 response += "</table>"

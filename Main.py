@@ -47,7 +47,7 @@ class CRUDWebService(object):
             with sqlite3.connect(DB_STRING) as c:
                 liste = input.split('#')
                 print(liste[0])
-                query = "insert into benutzer values("+liste[0]+liste[1]+liste[2]+liste[3]+")"
+                query = "insert into benutzer (vorname,nachname,username,password) values("+liste[0]+","+liste[1]+","+liste[2]+","+liste[3]+")"
                 r = c.execute(query)
                 return "Erfolgreich gespeichert"
         return "error"
@@ -68,10 +68,10 @@ class CRUDWebService(object):
 def setup_database():
     with sqlite3.connect(DB_STRING) as con:
         con.execute("DROP TABLE IF EXISTS benutzer")
-        con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY AUTOINCREMENT, vorname VARCHAR,"
-                    " nachname VARCHAR, username VARCHAR, password VARCHAR)")
-        con.execute("INSERT INTO benutzer VALUES('Marvin', 'Ertl', 'mertl', 'password')")
-        con.execute("INSERT INTO benutzer VALUES('Lukas', 'Zuba', 'lzuba', 'password')")
+        con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY AUTOINCREMENT, vorname VARCHAR, nachname VARCHAR, "
+                    "username VARCHAR, password VARCHAR)")
+        con.execute("INSERT INTO benutzer VALUES(null,'Marvin', 'Ertl', 'mertl', 'password')")
+        con.execute("INSERT INTO benutzer VALUES(null,'Lukas', 'Zuba', 'lzuba', 'password')")
 
 
 def cleanup_database():

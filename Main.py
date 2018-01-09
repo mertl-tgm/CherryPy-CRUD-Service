@@ -25,17 +25,25 @@ class CRUDWebService(object):
             r = c.execute("SELECT vorname FROM benutzer WHERE nr = 0", [cherrypy.session.id])
             return r.fetchone()
 
-    def POST(self, length=8):
-        print("TEST submit button")
-        some_string = ''.join(random.sample(string.hexdigits, int(length)))
-        with sqlite3.connect(DB_STRING) as c:
-            cherrypy.session['ts'] = time.time()
-            #c.execute("INSERT INTO user_string VALUES (?, ?)",
-            #          [cherrypy.session.id, some_string])
-            some_string = ""
-            r = c.execute("SELECT vorname FROM benutzer WHERE nr = 0")
-            print(r)
-        return r.fetchone()
+    def POST(self, param):
+        print("TEST submit button :" + param)
+        if param == "read":
+            with sqlite3.connect(DB_STRING) as c:
+                cherrypy.session['ts'] = time.time()
+                r = c.execute("SELECT * FROM benutzer")
+                print(r)
+                response = "<table border='1' class='table'><tr><td>Nr</td><td>Vorname</td><td>Nachname</td>" \
+                           "<td>Username</td></tr>"
+                while True:
+                    row = r.fetchone()
+                    if row == None:
+                        break
+                    print(str(row[0]))
+                    response += "<tr><td>" + str(row[0]) + "</td><td>" + row[1] + "</td><td>" + row[2] + "</td><td>" \
+                                + row[3] + "</td></tr>"
+                response += "</table>"
+            return response
+        return "error"
 
     def PUT(self, another_string):
         with sqlite3.connect(DB_STRING) as c:
@@ -56,6 +64,7 @@ def setup_database():
         con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY, vorname VARCHAR, nachname VARCHAR, "
                     "username VARCHAR, password VARCHAR)")
         con.execute("INSERT INTO benutzer VALUES(0, 'Marvin', 'Ertl', 'mertl', 'password')")
+        con.execute("INSERT INTO benutzer VALUES(1, 'Lukas', 'Zuba', 'lzuba', 'password')")
 
 
 def cleanup_database():
@@ -82,7 +91,7 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 8121})
+    cherrypy.config.update({'server.socket_port': 8370})
 
     webapp = CRUD()
     webapp.generator = CRUDWebService()

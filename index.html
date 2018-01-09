@@ -69,10 +69,10 @@
 
                 $("#showRead").click(function(e) {
                     closeTabs();
-                    $.get()
+                    $.post("/generator", {"param": "read"})
                         .done(function (string) {
                             $("#read-string").show();
-                            $("#read-string input").val(string);
+                            document.getElementById("listBenutzer").innerHTML = string;
                         })
                     e.preventDefault();
                 });
@@ -160,7 +160,7 @@
                                 <h3>Benutzer auslesen:</h3>
                             </div>
                             <div class="panel-body">
-                                <input type="text"/>
+                                <div id="listBenutzer" class="table-responsive"></div>
                             </div>
                         </div>
                     </div>

@@ -59,7 +59,7 @@
                         message += "Username muss mindestens 3 Zeichen lang sein.<br>";
                         $("#createMessage").text();
                     }
-                    $.post()
+                    $.post("/generator")
                         .done(function (string) {
                             $("#create-string").show();
                             $("#create-string input").val(string);
@@ -146,7 +146,7 @@
                                     </tr>
                                     <tr>
                                         <td></td>
-                                        <td><button id="createBenutzer">Erstellen</button></td>
+                                        <td><button type="submit" id="createBenutzer">Erstellen</button></td>
                                     </tr>
                                 </table>
                                 <div id="createMessage" style="color: red">Test</div>

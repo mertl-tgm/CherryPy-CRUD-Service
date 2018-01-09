@@ -26,12 +26,16 @@ class CRUDWebService(object):
             return r.fetchone()
 
     def POST(self, length=8):
+        print("TEST submit button")
         some_string = ''.join(random.sample(string.hexdigits, int(length)))
         with sqlite3.connect(DB_STRING) as c:
             cherrypy.session['ts'] = time.time()
-            c.execute("INSERT INTO user_string VALUES (?, ?)",
-                      [cherrypy.session.id, some_string])
-        return some_string
+            #c.execute("INSERT INTO user_string VALUES (?, ?)",
+            #          [cherrypy.session.id, some_string])
+            some_string = ""
+            r = c.execute("SELECT vorname FROM benutzer WHERE nr = 0")
+            print(r)
+        return r.fetchone()
 
     def PUT(self, another_string):
         with sqlite3.connect(DB_STRING) as c:
@@ -63,7 +67,7 @@ def cleanup_database():
     on server shutdown.
     """
     with sqlite3.connect(DB_STRING) as con:
-        con.execute("DROP TABLE IF EXISTS benutzer")
+        con.execute("DROP TABLE benutzer")
 
 
 if __name__ == '__main__':
@@ -85,7 +89,7 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 8090})
+    cherrypy.config.update({'server.socket_port': 8117})
 
     webapp = CRUD()
     webapp.generator = CRUDWebService()

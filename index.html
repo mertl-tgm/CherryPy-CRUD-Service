@@ -59,17 +59,18 @@
                         message += "Username muss mindestens 3 Zeichen lang sein.<br>";
                         $("#createMessage").text();
                     }
-                    $.post("/generator")
+                    $.post("/generator", {"param": "create", "input": $("#vorname").val() + "#" + $("#nachname").val()
+                        + "#" + $("#username").val() + "#" + $("#password").val()})
                         .done(function (string) {
                             $("#create-string").show();
-                            $("#create-string input").val(string);
+                            $("#createMessage").text(string);
                         })
                     e.preventDefault();
                 });
 
                 $("#showRead").click(function(e) {
                     closeTabs();
-                    $.post("/generator", {"param": "read"})
+                    $.post("/generator", {"param": "read", "input": ""})
                         .done(function (string) {
                             $("#read-string").show();
                             document.getElementById("listBenutzer").innerHTML = string;

@@ -26,7 +26,7 @@ class CRUDWebService(object):
             return r.fetchone()
 
     def POST(self, param, input):
-        print("TEST submit button :" + param)
+        print("TEST submit button :" + input)
         if param == "read":
             with sqlite3.connect(DB_STRING) as c:
                 cherrypy.session['ts'] = time.time()
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 8370})
+    cherrypy.config.update({'server.socket_port': 8403})
 
     webapp = CRUD()
     webapp.generator = CRUDWebService()

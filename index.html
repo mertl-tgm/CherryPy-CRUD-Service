@@ -52,18 +52,29 @@
                 });
 
                 $("#createBenutzer").click(function(e) {
-                    var message = "";
                     $("#createMessage").show();
-                    var username = $("#username").val();
-                    if (username.length < 3) {
-                        message += "Username muss mindestens 3 Zeichen lang sein.<br>";
-                        $("#createMessage").text();
+
+                    var message = "";
+                    if ($("#vorname").val().length < 3) message += "Vorname muss mindestens 3 Zeichen lang sein.<br>";
+                    if ($("#nachname").val().length < 3) message += "Nachname muss mindestens 3 Zeichen lang sein.<br>";
+                    if ($("#username").val().length < 3) message += "Username muss mindestens 3 Zeichen lang sein.<br>";
+                    if ($("#password").val().length < 3) message += "Passwort muss mindestens 3 Zeichen lang sein.<br>";
+                    if (message.length > 1) {
+                        document.getElementById("createMessage").style.color = "red";
+                        document.getElementById("createMessage").innerHTML = message;
+                        return;
                     }
+
                     $.post("/generator", {"param": "create", "input": $("#vorname").val() + "#" + $("#nachname").val()
                         + "#" + $("#username").val() + "#" + $("#password").val()})
                         .done(function (string) {
                             $("#create-string").show();
                             $("#createMessage").text(string);
+                            document.getElementById("createMessage").style.color = "black";
+                            $("#vorname").val("");
+                            $("#nachname").val("");
+                            $("#username").val("");
+                            $("#password").val("");
                         })
                     e.preventDefault();
                 });

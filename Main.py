@@ -29,9 +29,7 @@ class CRUDWebService(object):
         print("TEST submit button :" + input)
         if param == "read":
             with sqlite3.connect(DB_STRING) as c:
-                #cherrypy.session['ts'] = time.time()
                 r = c.execute("SELECT * FROM benutzer")
-                print(r)
                 response = "<table border='1' class='table'><tr><td>Nr</td><td>Vorname</td><td>Nachname</td>" \
                            "<td>Username</td></tr>"
                 while True:
@@ -47,8 +45,8 @@ class CRUDWebService(object):
             with sqlite3.connect(DB_STRING) as c:
                 liste = input.split('#')
                 print(liste[0])
-                query = "insert into benutzer (vorname,nachname,username,password) values("+liste[0]+","+liste[1]+","+liste[2]+","+liste[3]+")"
-                r = c.execute(query)
+                c.execute("INSERT INTO benutzer(vorname, nachname, username, password) VALUES (" + liste[0] + ", "
+                          + liste[1] + ", " + liste[2] + ", " + liste[3] + ")")
                 return "Erfolgreich gespeichert"
         return "error"
 
@@ -68,8 +66,8 @@ class CRUDWebService(object):
 def setup_database():
     with sqlite3.connect(DB_STRING) as con:
         con.execute("DROP TABLE IF EXISTS benutzer")
-        con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY AUTOINCREMENT, vorname VARCHAR, nachname VARCHAR, "
-                    "username VARCHAR, password VARCHAR)")
+        con.execute("CREATE TABLE IF NOT EXISTS benutzer(nr INTEGER PRIMARY KEY AUTOINCREMENT, vorname VARCHAR, "
+                    "nachname VARCHAR, username VARCHAR, password VARCHAR)")
         con.execute("INSERT INTO benutzer VALUES(null,'Marvin', 'Ertl', 'mertl', 'password')")
         con.execute("INSERT INTO benutzer VALUES(null,'Lukas', 'Zuba', 'lzuba', 'password')")
 
@@ -98,7 +96,7 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 8405})
+    cherrypy.config.update({'server.socket_port': 8429})
 
     webapp = CRUD()
     webapp.generator = CRUDWebService()

@@ -61,7 +61,44 @@
                     $.post("/generator", {"param": "update", "input": ""})
                         .done(function (string) {
                             $("#update-string").show();
-                            $("#update-string input").val(string);
+                            document.getElementById("listBenutzerUpdate").innerHTML = string;
+                        })
+                    e.preventDefault();
+                });
+
+                $("#updateBenutzer").click(function(e) {
+                    $("#updateMessage").show();
+
+                    var message = "";
+                    if ($("#vornameChange").val().length < 3) message += "Vorname muss mindestens 3 Zeichen lang sein.<br>";
+                    if ($("#nachnameChange").val().length < 3) message += "Nachname muss mindestens 3 Zeichen lang sein.<br>";
+                    if ($("#usernameChange").val().length < 3) message += "Username muss mindestens 3 Zeichen lang sein.<br>";
+                    if ($("#passwordChange").val().length < 3) message += "Passwort muss mindestens 3 Zeichen lang sein.<br>";
+                    if (message.length > 1) {
+                        document.getElementById("updateMessage").style.color = "red";
+                        document.getElementById("updateMessage").innerHTML = message;
+                        return;
+                    }
+
+                    $.post("/generator", {"param": "updateBenutzer", "input": document.getElementById("numberChange").innerText + "#" +
+                        $("#vornameChange").val() + "#" + $("#nachnameChange").val() + "#" + $("#usernameChange").val()
+                        + "#" + $("#passwordChange").val()})
+                        .done(function (string) {
+                            $("#update-string").show();
+                            $("#changeInput").hide();
+                            $("#updateMessage").text(string);
+                            document.getElementById("updateMessage").style.color = "black";
+                            $("#vornameChange").val("");
+                            $("#nachnameChange").val("");
+                            $("#usernameChange").val("");
+                            $("#passwordChange").val("");
+                        })
+                    $("#listBenutzerUpdate").hide();
+                     $.post("/generator", {"param": "update", "input": ""})
+                        .done(function (string) {
+                            $("#listBenutzerUpdate").show();
+                            document.getElementById("listBenutzerUpdate").innerHTML = "";
+                            document.getElementById("listBenutzerUpdate").innerHTML = string;
                         })
                     e.preventDefault();
                 });
@@ -82,6 +119,7 @@
                     $("#update-string").hide();
                     $("#delete-string").hide();
                     $("#createMessage").hide();
+                    $("#changeInput").hide();
                 }
             });
         </script>
@@ -150,29 +188,53 @@
                                 <h3>Benutzer updaten:</h3>
                             </div>
                             <div class="panel-body">
-                                <table style="width:30%">
-                                    <tr>
-                                        <td>Vorname:</td>
-                                        <td><input id="vornameChange" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Nachname:</td>
-                                        <td><input id="nachnameChange" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Username:</td>
-                                        <td><input id="usernameChange" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Passwort:</td>
-                                        <td><input id="passwordChange" type="password" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td><button type="submit" id="updateBenutzer">Erstellen</button></td>
-                                    </tr>
-                                </table>
-                                <div id="updateMessage" style="color: red">Test</div>
+                                <script type="text/javascript">
+                                    function updateBenutzer(value) {
+                                        $("#changeInput").show();
+
+                                        $.post("/generator", {"param": "getBenutzer", "input": value})
+                                            .done(function (string) {
+                                                var values = string.split("#");
+                                                document.getElementById("numberChange").innerHTML = values[0];
+                                                document.getElementById("vornameChange").value = values[1];
+                                                document.getElementById("nachnameChange").value = values[2];
+                                                document.getElementById("usernameChange").value = values[3];
+                                                document.getElementById("passwordChange").value = values[4];
+
+                                            })
+                                        e.preventDefault();
+                                    }
+                                </script>
+                                <div id="changeInput">
+                                    <table style="width:30%">
+                                        <tr>
+                                            <td>Nummer:</td>
+                                            <td id="numberChange"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Vorname:</td>
+                                            <td><input id="vornameChange" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nachname:</td>
+                                            <td><input id="nachnameChange" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Username:</td>
+                                            <td><input id="usernameChange" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Passwort:</td>
+                                            <td><input id="passwordChange" type="password" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><button type="submit" id="updateBenutzer">Speichern</button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div id="updateMessage" style="color: red"></div>
+                                <div id="listBenutzerUpdate"></div>
                             </div>
                         </div>
                     </div>

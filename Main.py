@@ -36,6 +36,13 @@ class CRUDWebService(object):
                 response += "</table>"
             return response
 
+        if param == "updateBenutzer":
+            with sqlite3.connect(DB_STRING) as c:
+                liste = input.split('#')
+                c.execute("update benutzer set vorname='" + liste[1] + "',nachname='"
+                          + liste[2] + "',username='" + liste[3] + "',password='" + liste[4] + "' where nr="+liste[0])
+                return "Benutzer erfolgreich geändert."
+
         if param == "create":
             with sqlite3.connect(DB_STRING) as c:
                 liste = input.split('#')

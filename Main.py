@@ -1,8 +1,5 @@
-import os, os.path
-import random
+import os.path
 import sqlite3
-import string
-import time
 
 import cherrypy
 
@@ -29,7 +26,7 @@ class CRUDWebService(object):
                            "<td>Username</td></tr>"
                 while True:
                     row = r.fetchone()
-                    if row == None:
+                    if row is None:
                         break
                     response += "<tr><td>" + str(row[0]) + "</td><td>" + row[1] + "</td><td>" + row[2] + "</td><td>" \
                                 + row[3] + "</td></tr>"
@@ -52,10 +49,11 @@ class CRUDWebService(object):
                            "<td>Username</td><td>Löschen</td></tr>"
                 while True:
                     row = r.fetchone()
-                    if row == None:
+                    if row is None:
                         break
                     response += "<tr><td>" + str(row[0]) + "</td><td>" + row[1] + "</td><td>" + row[2] + "</td><td>" \
-                                + row[3] + "</td><td> <button onClick='deleteBenutzer(" + str(row[0]) + ")'>Löschen</button></td></tr>"
+                                + row[3] + "</td><td> <button onClick='deleteBenutzer(" + str(row[0]) + ")'>Löschen" \
+                                "</button></td></tr>"
                 response += '</table>'
             return response
 

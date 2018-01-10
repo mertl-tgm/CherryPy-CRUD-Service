@@ -58,7 +58,7 @@
 
                 $("#showUpdate").click(function(e) {
                     closeTabs();
-                    $.get()
+                    $.post("/generator", {"param": "update", "input": ""})
                         .done(function (string) {
                             $("#update-string").show();
                             $("#update-string input").val(string);
@@ -128,7 +128,7 @@
                                         <td><button type="submit" id="createBenutzer">Erstellen</button></td>
                                     </tr>
                                 </table>
-                                <div id="createMessage" style="color: red">Test</div>
+                                <div id="createMessage" style="color: red"></div>
                             </div>
                         </div>
                     </div>
@@ -150,7 +150,29 @@
                                 <h3>Benutzer updaten:</h3>
                             </div>
                             <div class="panel-body">
-                                <input type="text"/>
+                                <table style="width:30%">
+                                    <tr>
+                                        <td>Vorname:</td>
+                                        <td><input id="vornameChange" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nachname:</td>
+                                        <td><input id="nachnameChange" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Username:</td>
+                                        <td><input id="usernameChange" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Passwort:</td>
+                                        <td><input id="passwordChange" type="password" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><button type="submit" id="updateBenutzer">Erstellen</button></td>
+                                    </tr>
+                                </table>
+                                <div id="updateMessage" style="color: red">Test</div>
                             </div>
                         </div>
                     </div>

@@ -19,18 +19,13 @@ class CRUD(object):
 class CRUDWebService(object):
 
     @cherrypy.tools.accept(media='text/plain')
-    def GET(self):
-        with sqlite3.connect(DB_STRING) as c:
-            cherrypy.session['ts'] = time.time()
-            r = c.execute("SELECT vorname FROM benutzer WHERE nr = 0", [cherrypy.session.id])
-            return r.fetchone()
-
     def POST(self, param, input):
         print("TEST submit button :" + input)
         if param == "read":
             with sqlite3.connect(DB_STRING) as c:
                 r = c.execute("SELECT * FROM benutzer")
-                response = "<table border='1' class='table'><tr><td>Nr</td><td>Vorname</td><td>Nachname</td>" \
+                response = "<table width='100%' class='table table-striped table-bordered'" \
+                           "cellspacing='0'><tr><td>Nr</td><td>Vorname</td><td>Nachname</td>" \
                            "<td>Username</td></tr>"
                 while True:
                     row = r.fetchone()
@@ -47,20 +42,29 @@ class CRUDWebService(object):
                 print(liste[0])
                 c.execute("INSERT INTO benutzer(vorname, nachname, username, password) VALUES (" + liste[0] + ", "
                           + liste[1] + ", " + liste[2] + ", " + liste[3] + ")")
-                return "Erfolgreich gespeichert"
+                return "Benutzer erfolgreich gespeichert."
+
+        if param == "delete":
+            with sqlite3.connect(DB_STRING) as c:
+                r = c.execute("SELECT * FROM benutzer")
+                response = "<table width='100%' class='table table-striped table-bordered'" \
+                           "cellspacing='0'><tr><td>Nr</td><td>Vorname</td><td>Nachname</td>" \
+                           "<td>Username</td><td>Löschen</td></tr>"
+                while True:
+                    row = r.fetchone()
+                    if row == None:
+                        break
+                    response += "<tr><td>" + str(row[0]) + "</td><td>" + row[1] + "</td><td>" + row[2] + "</td><td>" \
+                                + row[3] + "</td><td> <button onClick='deleteBenutzer(" + str(row[0]) + ")'>Löschen</button></td></tr>"
+                response += '</table>'
+            return response
+
+        if param == "deleteBenutzer":
+            with sqlite3.connect(DB_STRING) as c:
+                c.execute("DELETE FROM benutzer WHERE nr=" + input)
+            return self.POST("delete", "")
+
         return "error"
-
-    def PUT(self, another_string):
-        with sqlite3.connect(DB_STRING) as c:
-            cherrypy.session['ts'] = time.time()
-            c.execute("UPDATE user_string SET value=? WHERE session_id=?",
-                      [another_string, cherrypy.session.id])
-
-    def DELETE(self):
-        cherrypy.session.pop('ts', None)
-        with sqlite3.connect(DB_STRING) as c:
-            c.execute("DELETE FROM user_string WHERE session_id=?",
-                      [cherrypy.session.id])
 
 
 def setup_database():
@@ -96,7 +100,8 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 8429})
+    cherrypy.config.update({'server.socket_port': 32423})
+    cherrypy.config.update({'engine.autoreload_on': False})
 
     webapp = CRUD()
     webapp.generator = CRUDWebService()

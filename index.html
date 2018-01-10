@@ -12,39 +12,6 @@
             $(document).ready(function() {
                 closeTabs();
 
-                $("#generate-string").click(function(e) {
-                    $.post("/generator", {"length": $("input[name='length']").val()})
-                     .done(function(string) {
-                        $("#the-string").show();
-                        $("#the-string input").val(string);
-                    });
-                    e.preventDefault();
-                });
-
-                $("#replace-string").click(function(e) {
-                    $.ajax({
-                        type: "PUT",
-                        url: "/generator",
-                        data: {"another_string": $("#the-string input").val()}
-                    })
-                    .done(function() {
-                        alert("Replaced!");
-                    });
-                    e.preventDefault();
-                });
-
-                $("#delete-string").click(function(e) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: "/generator"
-                    })
-                    .done(function() {
-                        $("#the-string").hide();
-                    });
-                    e.preventDefault();
-                });
-
-
                 $("#showCreate").click(function(e) {
                     closeTabs();
                     $("#create-string").show()
@@ -101,10 +68,10 @@
 
                 $("#showDelete").click(function(e) {
                     closeTabs();
-                    $.get()
+                    $.post("/generator", {"param": "delete", "input": ""})
                         .done(function (string) {
                             $("#delete-string").show();
-                            $("#delete-string input").val(string);
+                            document.getElementById("listBenutzerDelete").innerHTML = string;
                         })
                     e.preventDefault();
                 });
@@ -194,7 +161,17 @@
                                 <h3>Benutzer löschen:</h3>
                             </div>
                             <div class="panel-body">
-                                <input type="text"/>
+                                <script type="text/javascript">
+                                    function deleteBenutzer(value) {
+                                        $("#delete-string").hide();
+                                        $.post("/generator", {"param": "deleteBenutzer", "input": value})
+                                            .done(function (string) {
+                                                $("#delete-string").show();
+                                                document.getElementById("listBenutzerDelete").innerHTML = string;
+                                            })
+                                    }
+                                </script>
+                                <div id="listBenutzerDelete"></div>
                             </div>
                         </div>
                     </div>

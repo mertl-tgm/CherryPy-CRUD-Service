@@ -70,8 +70,8 @@ class CRUDWebService(object):
         if param == "create":
             with sqlite3.connect(DB_STRING) as c:
                 liste = input.split('#')
-                c.execute("INSERT INTO benutzer(vorname, nachname, username, password) VALUES (" + liste[0] + ", "
-                          + liste[1] + ", " + liste[2] + ", " + liste[3] + ")")
+                c.execute("INSERT INTO benutzer(vorname, nachname, username, password) VALUES ('" + liste[0] + "', '"
+                          + liste[1] + "', '" + liste[2] + "', '" + liste[3] + "')")
                 return "Benutzer erfolgreich gespeichert."
 
         if param == "delete":

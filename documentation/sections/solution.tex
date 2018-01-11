@@ -12,7 +12,6 @@ Folgende Punkte wurden bearbeitet:
 	\item Ergebnis
 \end{itemize}
 
-
 \subsection{Allgemein}
 
 Wir haben uns für CherryPy entschieden und für einen Anwendungsfall, der schnell zu implementieren und eine niedrige Komplexität aufweist. Das ist laut CherryPy einer der häufigsten Anwendungsfälle für CherryPy. Ein weiterer wichtiger Vorteil ist, dass CherryPy auf OOP ausgelegt ist und lässt sich dadurch zusätzlich leichter schreiben und verstehen.
@@ -40,9 +39,9 @@ class HelloWorld(object):
 cherrypy.quickstart(HelloWorld())
 \end{lstlisting}
 
-Mit diesen Zeilen ist eine Webseite erstellt und bereit erweitert zu werden.
+Mit diesen Zeilen ist eine Webseite erstellt und funktionsfähig
 
-Insgesamt beläuft sich der Arbeitsaufwand auf ungefähr 0 Stunden.
+Insgesamt beläuft sich der Arbeitsaufwand auf ungefähr \textbf{10 Stunden}.
 
 \subsection{CherryPy und andere angewendeten Technologien}
 
@@ -240,6 +239,24 @@ Bei der index.html Datei handelt es sich um eine einfache Webseite welche mittel
 
 Viel wichtiger ist der JavaScript Teil, dieser ließt nämlich die Eingaben aus und sendet diese an den Server.
 
+Nachfolgend ist der JavaScript Code, welcher Aufgerufen wird, wenn der Button showRead angeklickt wird. Als erstes werden alle anderen Tabs geschlossen und anschließend über die Post Methode mittels den Parameter read eine Anfrage gesendet. Als Response kommt die Tabelle mit allen Benutzer zurück, diese wird an bei dem Element listBenutzer eingefügt.
+
+\begin{lstlisting}[language=HTML, caption=Anfrage senden an den Server]
+$("#showRead").click(function(e) {
+	closeTabs();
+	$.post("/generator", {"param": "read", "input": ""})
+	.done(function (string) {
+		$("#read-string").show();
+		document.getElementById("listBenutzer").innerHTML = string;
+	})
+	e.preventDefault();
+});
+\end{lstlisting}
+
+Die restlichen Methoden für die anderen Funktionen sind gleich aufgebaut, einige überprüfen die Eingaben davor noch bzw. fassen die Angaben zu einen String zusammen, welcher anschließend als String über die input Variable an den Server gesendet wird.
+
+Ansonsten wurde noch ein bisschen JavaScript verwendet um, Eingabemöglichkeiten zu verstecken bzw. anzuzeigen wenn diese benötigt werden. Dadurch wird die Oberfläche übersichtlicher und einfacher bedienbar.
+
 \subsection{Aufgetretene Probleme}
 
 \subsubsection{Tabelle nicht gefunden}
@@ -256,9 +273,52 @@ Hierbei hat es sich um eine INSERT Anweisung gehandelt, die eine syntaktisch fal
 
 Gelöst haben wird dies, indem wir die Zusammensetzung der Anweisung neu geschrieben haben und explizit die Reihenfolge der Attribute angegeben haben.
 
-\subsubsection{JS Funktionen nicht aufrufbar}$ function\,showuser\,not\,found $ 
+\subsubsection{JS Funktionen nicht aufrufbar}
+Ein nicht so einfach findbarer Fehler war, $ function\,showuser\,not\,found $ 
 
-\subsubsection{Aufrufprobleme}Delete konnte Daten nicht anzeigen, wenn davor Anzeigen aufgerufen wurde
+Bei diesem Fehler wurde eine Anfrage an den Server gesendet, durch einen Syntax Fehler bzw. dadurch das es lange her ist, seit wir mit JavaScript gearbeitet haben, gab es einen Fehler beim Absenden der Anfrage. Da aber die Anfrage gesendet worden ist, haben wir den Fehler erst am Server gesucht, da dort der Fehler auch aufgetreten ist, dabei war aber die gesendete Anfrage nicht im richtigen Format.
 
 
 \subsection{Ergebnis}
+
+
+Das Ergebnis der Übung ist eine Webseite, die die CRUD Funktionen bereitstellt, um Benutzer zu verwalten.
+
+CREATE:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{images/create}
+	\caption{CREATE Funktion}
+	\label{fig:create}
+\end{figure}
+
+READ:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/read}
+	\caption{READ Funktion}
+	\label{fig:read}
+\end{figure}
+
+UPDATE:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/update}
+	\caption{UPDATE Funktion}
+	\label{fig:update}
+\end{figure}
+
+DELETE:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{images/delete}
+	\caption{DELETE Funktion}
+	\label{fig:delete}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{images/delete_after}
+	\caption{DELETE nach dem Löschen von Max Mustermann}
+	\label{fig:deleteafter}
+\end{figure}

@@ -1,0 +1,101 @@
+%!TEX root=../document.tex
+
+\section{Umsetzung}
+\label{sec:Ergebnisse}
+
+Die Übung ist in 2 Bereiche aufzuteilen, den Server Teil, dieser kümmert sich um das Speichern und Lesen aus der Datenbank, diese Aufgabe wurde mittels den Python WebFramework CherryPy umgesetzt. Der Client Teil kümmert sich hingegen um die Darstellung sowie um die Eingaben, dies wurde mittels HTML, CSS und JavaScript umgesetzt.
+
+\subsection{CherryPy}
+
+Als erstes wurde eine Klasse CRUD erstellt, diese wird aufgerufen sobald man auf localhost mit der entsprechenden Port Nummer zugreift. Die Klasse öffnet die index.html Datei und sendet den Inhalt an den Browser zurück.
+
+\begin{lstlisting}[language=Python, caption=Klasse zur Darstellung der Index.html]
+class CRUD(object):
+	@cherrypy.expose
+	def index(self):
+		return open('index.html')
+\end{lstlisting}
+
+Nun wurde eine Klasse erstellt, welche auf die HTML Befehle reagiert, dies sind GET, POST, PUT, ... . In unserem Fall haben wir nur POST verwendet mit 2 Parameter. Der erste Parameter param gibt an welche Aktion wir durchführen wollen, der zweite Parameter input gibt liefert zusätzliche Informationen, wie zum Beispiel eingeben Werte.
+
+\begin{lstlisting}[language=Python, caption=Klasse zur verwaltung der HTML Befehle]
+@cherrypy.expose
+class CRUDWebService(object):
+
+	@cherrypy.tools.accept(media='text/plain')
+	def POST(self, param, input):
+\end{lstlisting}
+
+Wird ein read als Parameter gesendet, erwartet sich der Client alle Benutzer. Aus diesem Grund werden alle Benutzer aus der Datenbank ausgelesen und eine HTML Tabelle erstellt. Diese wird dann als HTML Response zum Client zurückgesendet und dargestellt.
+
+\begin{lstlisting}[language=Python, caption=Auslesen aller Benutzer aus der Datenbank]
+if param == "read":
+	with sqlite3.connect(DB_STRING) as c:
+		r = c.execute("SELECT * FROM benutzer")
+		response = "<table width='100%' class='table table-striped 		table-bordered'" \
+					"cellspacing='0'><tr><td>Nr</td><td>Vorname</td><td>Nachname</td>" \
+					"<td>Username</td></tr>"
+		while True:
+			row = r.fetchone()
+			if row is None:
+				break
+			response += "<tr><td>" + str(row[0]) + "</td><td>" + row[1] + "</td><td>" + row[2] + "</td><td>" \
+			+ row[3] + "</td></tr>"
+		response += "</table>"
+	return response
+\end{lstlisting}
+
+Auf den Parameter update reagiert das Programm sehr ähnlich, einziger Unterschied ist, dass die Benutzer in einer Tabelle zurückgeliefert werden, die bei jedem Benutzer einen Button zum Bearbeiten hat. Außerdem müsste hier ein kurzes sleep eingebaut werden, da update gleich nach einer Datenbank ändern die neuen Benutzer ausliest, dadurch konnte es passieren das beim Auslesen noch nicht die neuen Werte dabei waren.
+
+\begin{lstlisting}[language=Python, caption=Auslesen aller Benutzer aus der Datenbank und bearbeitbar zurückliefern]
+if param == "update":
+	sleep(0.05)
+	with sqlite3.connect(DB_STRING) as c:
+		r = c.execute("SELECT * FROM benutzer")
+		response = "<table width='100%' class='table table-striped table-bordered'" \
+					"cellspacing='0'><tr><td>Nr</td><td>Vorname</td><td>Nachname</td>" \
+					"<td>Username</td><td>Ändern</td></tr>"
+		while True:
+			row = r.fetchone()
+			if row is None:
+				break
+		response += "<tr><td>" + str(row[0]) + "</td><td>" + row[1] + "</td><td>" + row[2] + "</td><td>" \
+					+ row[3] + "</td><td> <button onClick='updateBenutzer(" + str(row[0]) + ")'>Ändern" \
+					"</button></td></tr>"
+		response += '</table>'
+	return response
+\end{lstlisting}
+
+
+
+\subsection{Tabelle}
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[!h]
+	\center
+	\begin{tabular}{ | @{\hspace{3mm}} c @{\hspace{3mm}} | @{\hspace{3mm}} l @{\hspace{3mm}} | }
+		\hline Header & Kopf\\ \hline\hline
+		\textbf{Lorem} & Ipsum dolor sit amet, consetetur sadipscing elitr\\ \hline
+		\textbf{Ipsum} & At vero eos et accusam et justo duo dolores et ea rebum.\\
+			& Stet clita kasd gubergren, no sea takimata sanctus\\ \hline
+		\textbf{Dolor} & Consetetur sadipscing elitr, sed diam nonumy\\\hline
+	\end{tabular}
+	\caption{Lorem ipsum dolor sit amet \cite{tanenbaum2007verteilte}}
+	\label{methoden}
+\end{table}
+
+\subsection{Aufzählung}
+
+\begin{itemize}
+	\item \textbf{Lorem ipsum:} dolor sit amet, consetetur sadipscing elitr
+	\item sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat
+	\item ut labore et dolore magna aliquyam erat, sed diam voluptua
+\end{itemize}
+
+\subsection{Code}
+
+At vero eos et accusam et justo duo dolores et ea rebum.
+
+\begin{lstlisting}[style=Java, caption=Implizite Transaktion]
+
+\end{lstlisting}
+

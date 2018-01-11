@@ -18,7 +18,6 @@ class CRUDWebService(object):
 
     @cherrypy.tools.accept(media='text/plain')
     def POST(self, param, input):
-        print("TEST submit button :" + input)
         if param == "read":
             with sqlite3.connect(DB_STRING) as c:
                 r = c.execute("SELECT * FROM benutzer")

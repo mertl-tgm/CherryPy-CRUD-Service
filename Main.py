@@ -62,7 +62,6 @@ class CRUDWebService(object):
 
         if param == "updateBenutzer":
             with sqlite3.connect(DB_STRING) as c:
-                print(input)
                 liste = input.split('#')
                 c.execute("UPDATE benutzer SET vorname='" + liste[1] + "',nachname='"
                           + liste[2] + "',username='" + liste[3] + "',password='" + liste[4] + "' WHERE nr=" + liste[0])
@@ -71,7 +70,6 @@ class CRUDWebService(object):
         if param == "create":
             with sqlite3.connect(DB_STRING) as c:
                 liste = input.split('#')
-                print(liste[0])
                 c.execute("INSERT INTO benutzer(vorname, nachname, username, password) VALUES (" + liste[0] + ", "
                           + liste[1] + ", " + liste[2] + ", " + liste[3] + ")")
                 return "Benutzer erfolgreich gespeichert."
@@ -97,7 +95,7 @@ class CRUDWebService(object):
                 c.execute("DELETE FROM benutzer WHERE nr=" + input)
             return self.POST("delete", "")
 
-        return "error"
+        return "Ungültige Anfrage"
 
 
 def setup_database():
@@ -133,7 +131,7 @@ if __name__ == '__main__':
 
     cherrypy.engine.subscribe('start', setup_database)
     cherrypy.engine.subscribe('stop', cleanup_database)
-    cherrypy.config.update({'server.socket_port': 24128})
+    cherrypy.config.update({'server.socket_port': 43534})
     cherrypy.config.update({'engine.autoreload_on': False})
 
     webapp = CRUD()

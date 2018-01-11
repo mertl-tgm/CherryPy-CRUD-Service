@@ -60,9 +60,19 @@ Zusätzlich haben wir, um der Webseite ein sprechenden Design zu geben, CSS und 
 
 \subsection{Aufgetretene Probleme}
 
-\subsubsection{Tabelle nicht gefunden}$ no\,such\,table:\,benutzer $ 
+\subsubsection{Tabelle nicht gefunden}
+Die häufigste Fehlermeldung dieser Art war: $ no\,such\,table:\,benutzer $ 
 
-\subsubsection{Datensatz nicht richtig abgespeichert}$ no\,such\,attribute:\,zuba $ 
+Diesen Fehler konnten wir auf keine genaue Stelle eingrenzen, da dieser Fehler zufällig beim Starten des Server hin und wieder aufgetretten ist. 
+
+Gelöst haben wir diesen Fehler dann durch das Sicherstellen, dass die Tabelle noch existiert und wenn nicht die Tabelle neu erstellt und mit Standarddatensätzen wieder befüllt wird.
+
+\subsubsection{Datensatz nicht richtig abgespeichert}
+Ein Fehler, der leicht zu lösen war, war: $ no\,such\,attribute:\,zuba $ 
+
+Hierbei hat es sich um eine INSERT Anweisung gehandelt, die eine syntaktisch falschen Aufbau hatte, den wir allerdings erst sehr spät bemerkt haben. 
+
+Gelöst haben wird dies, indem wir die Zusammensetzung der Anweisung neu geschrieben haben und explizit die Reihenfolge der Attribute angegeben haben.
 
 \subsubsection{JS Funktionen nicht aufrufbar}$ function\,showuser\,not\,found $ 
 
